@@ -1,0 +1,34 @@
+<div class="container">
+	<div class="row">
+		<div class="timeline-centered col-md-12">
+		
+			<article ng-repeat = "article in school.honors_awards" ng-class-even="'timeline-entry'" ng-class-odd="'timeline-entry left-aligned'" >
+				<div class="timeline-entry-inner">
+					<time class="timeline-time"><span style="font-size:15px;">{{article.date}}</span> </time>
+					
+					<div ng-class="(article.type =='award') ? 'timeline-icon bg-info' : 'timeline-icon bg-warning'">
+						<i ng-class="(article.type =='award') ? 'glyphicon glyphicon-star' : 'glyphicon glyphicon-heart'"></i>
+					</div>
+					<div class="timeline-label" set-ng-animate="false">
+						<h2><strong>{{article.title}}</strong></h2>
+						<blockquote>{{article.desc}}</blockquote>
+						<carousel interval="picInterval">
+							<slide ng-repeat="photo in article.photos" active="slide.active">
+							    <img ng-src="{{photo.image}}" class="img-responsive" style="width:400px; height:300px;">
+							</slide>
+						</carousel>
+					</div>
+				</div>
+			</article>
+    
+			<article class="timeline-entry begin">
+				<div class="timeline-entry-inner">
+					<div class="timeline-icon" style="-webkit-transform: rotate(-90deg); -moz-transform: rotate(-90deg);">
+						<i class="entypo-flight"></i>
+					</div>
+				</div>
+			</article>
+			
+		</div>
+	</div>
+</div>

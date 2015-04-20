@@ -1,0 +1,20 @@
+<div class="container">
+	<div class="row" ng-repeat="fac in school.faculty">
+		<div class="col-md-12">
+			<h3> {{fac.dept}} </h3>
+			<div class="well listing" ng-repeat="staff in fac.staffs">
+      			<div class="row">
+      				<div class="col-md-2">
+			       		 <figure class="pull-left">
+	                        <img class="media-object img-circle img-responsive" ng-src="{{staff.pic}}" alt="...">
+	                    </figure>
+			  		</div>	 
+			  		<div class="col-sm-10">
+			  			 <h4 class="list-group-item-heading"> {{staff.name}} </h4>
+	                    <p class="list-group-item-text">{{staff.intro}}</p>				
+					</div>
+	  			 </div>
+	        </div>		
+		</div>
+	</div>
+</div>

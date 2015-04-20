@@ -1,0 +1,236 @@
+<!-- Navigation -->
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation" id="top-nav">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#/"></a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="navbar-collapse collapse" id="navbar-collapse-1">
+            
+                <ul class="nav navbar-nav navbar-right">
+                    <li ng-class="{active: routeIs('/schools/listing')}">
+                        <a href="#"  data-ng-click="getSchoolListing()">Find a School</a>
+                    </li>
+                    <li ng-class="{active: routeIs('/forum')}">
+                        <a href="#/forum" >Connect</a>
+                    </li>
+                    <li ng-if="isAdmin()" ng-class="{active: routeIs('/admin/users')}">
+                        <a href="#/admin/users">Admin</a>
+                    </li>
+                     <li ng-hide="user">
+                        <a href="" data-ng-click="openLoginModal()">Sign In</a>
+                    </li>
+                    <li class="dropdown" ng-show="user">
+                      <a data-target="#" class="dropdown-toggle" data-toggle="dropdown"> {{user.name}} <b class="caret"></b></a>
+                      <ul class="dropdown-menu">
+                        <li><a href="#">Profile</a></li>
+                        <li><a href="#">Settings</a></li>
+                        <li class="divider"></li>
+                         <li><a href="#" data-ng-click="logout()"><span class="glyphicon glyphicon-off"></span>&nbsp;Logout</a></li>
+                      </ul>
+                    </li>
+                   
+                 </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+    </div>
+    
+    <div class="modal" id="loginModal">
+		<div class="modal-dialog">
+		      <div class="modal-content">
+			        <div class="modal-header">
+			          <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="clearModalErrors()">&times;</button>
+			          <h4 class="modal-title">Welcome to MySchool!</h4>
+			        </div>
+			        <div class="modal-body login-modal">
+			        	<div data-ng-show="loginerrors.length > 0">
+						    <div  role="alert" ng-repeat="error in loginerrors" ng-class="error.code =='LOGIN_FAILURE'? 'alert alert-danger' : 'alert alert-info'">
+						         {{error.message}}
+						    </div>
+						</div>
+			        	<div class="clearfix"></div>
+			        	<div id="social-icons-conatainer">
+			        		<div class="modal-body-left">
+						          <form name="loginForm" name="loginForm" class="form-horizontal" novalidate>
+						             <div class="form-group" field-has-error>
+											<div class="col-sm-12 col-md-12 input-group">
+												<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+							     	        	<input type="text" class="form-control" id="username" placeholder="Username" data-ng-model="credentials.username" field-focus required>
+								            </div>
+						      		  </div>
+								      <div class="form-group" field-has-error>
+								      	 <div class="col-sm-12 col-md-12 input-group">
+								      	 		<span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+							        			<input type="password" class="form-control" id="password" placeholder="Password" data-ng-model="credentials.password" required/>
+						                 </div>		      
+								      </div>
+						              <div class="row">
+						             	<button type="submit" class="btn btn-success" data-ng-disabled="loginForm.$invalid" data-ng-click="login(credentials)" >Sign in</button>
+						              </div>
+						              <div class="row" style="margin-top:10px">
+						              	<a href="" ng-click="openForgetPasswordModal()">Forgot Password?</a>
+						              </div>
+						         </form>
+						    </div>
+						    <div class="modal-body-right">
+			        			<div class="modal-social-icons">
+			        				<a class="btn btn-default facebook" href="#" ng-click="fbLogin()"> <i class="fa fa-facebook modal-icons"></i> Sign In with Facebook </a>
+			        				<a class="btn btn-default google" href="#" ng-click="googleLogin()"> <i class="fa fa-google-plus modal-icons"></i> Sign In with Google </a>
+			        				<!--<a class="btn btn-default twitter" href="#" ng-click="twitterLogin()"> <i class="fa fa-twitter modal-icons"></i> Sign In with Twitter </a>-->
+			        				<a class="btn btn-default linkedin" href="#" ng-click="linkedinLogin()"> <i class="fa fa-linkedin modal-icons"></i> Sign In with Linkedin </a>
+			        			</div> 
+			        		</div>
+			        		<div id="center-line"> OR </div>
+						 </div>
+			        </div>
+			        <div class="clearfix"></div>
+			        <div class="modal-footer">
+			            New To MySchool? 
+			            <button type="submit" class="btn btn-primary" data-toggle="modal"  data-ng-click="register()">Register</button>
+			        </div>
+		      </div>
+	    </div>
+	</div>
+	
+	<!-- Signup Modal-->
+	<div id="signupModal" class="modal">
+         <div class="modal-dialog">
+         	<div  class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			          		<h4 class="modal-title">Sign Up</h4>
+                        </div>  
+                        <div class="modal-body">
+                            <form id="signupForm" name="signupForm" class="form-horizontal" novalidate data-toggle="validator">
+                                                         
+                                <div class="form-group" field-has-error>
+                                    <label for="email" class="col-sm-3 control-label">Email</label>
+                                    <div class="col-sm-9">
+                                        <input type="email" name="email" class="form-control" placeholder="Email Address" data-ng-model="newUser.email" required>
+                                    	<p ng-show="signupForm.email.$invalid && !signupForm.email.$pristine" class="help-block">Enter a valid email.</p>
+                                    </div>
+                                </div>
+                                    
+                                <div class="form-group" field-has-error>
+                                    <label for="firstname" class="col-sm-3 control-label">First Name</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" name="firstname" placeholder="First Name" data-ng-model="newUser.fname" required>
+                                    </div>
+                                </div>
+                                <div class="form-group" field-has-error>
+                                    <label for="lastname" class="col-sm-3 control-label">Last Name</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" name="lastname" placeholder="Last Name" data-ng-model="newUser.lname" required>
+                                    </div>
+                                </div>
+                                <div class="form-group" field-has-error>
+                                    <label for="password" class="col-sm-3 control-label">Password</label>
+                                    <div class="col-sm-9">
+                                        <input id="inputPassword" type="password" class="form-control" name="password" placeholder="Password" data-ng-model="newUser.password" required>
+                                    </div>
+                                </div>
+                                    
+                                <div class="form-group" field-has-error>
+                                    <label for="confirmPassword" class="col-sm-3 control-label">Confirm</label>
+                                    <div class="col-sm-9">
+                                        <input type="password" class="form-control" name="confirmPassword" placeholder="Re-Password" data-ng-model="newUser.repassword" data-match="#inputPassword" data-match-error="Passwords do not match">
+                                    	<div class="help-block with-errors"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group" field-has-error>
+                                    <label for="usertype" class="col-sm-3 control-label">You are</label>
+	                                <div id="tab" class="btn-group col-sm-9">
+									  	<label class="btn btn-primary btn-outline" ng-model="newUser.userType" btn-radio="'Parent'">Parent</label>
+        								<label class="btn btn-primary btn-outline" ng-model="newUser.userType" btn-radio="'School'">School</label>
+						            </div>
+								</div>
+								
+								<div class="form-group" field-has-error ng-show="newUser.userType == 'School'">
+                                    <label for="schoolname" class="col-sm-3 control-label">School Name</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" name="schoolname" placeholder="Enter your school name" data-ng-model="newUser.schoolName" required>
+                                    </div>
+                                </div>
+								
+                                <div class="form-group">
+                                    <!-- Button -->                                        
+                                    <div class="col-sm-offset-3 col-sm-9">
+                                        <button id="btn-signup" type="submit" type="button" class="btn btn-primary" data-ng-disabled="signupForm.$invalid" data-ng-click="signup(newUser)">Sign Up</button>
+                                    </div>
+                                </div>
+                                
+                            </form>
+                         </div>
+                         <div class="clearfix"></div>
+				        <div class="modal-footer">
+				            <a href="" ng-click="openLoginModal()">Back to Login</a>
+				        </div>
+                    </div>
+               </div>         
+         </div>
+         
+         <!-- forgot password modal -->
+        <div class="modal" id="forgetPwdModal">
+			<div class="modal-dialog">
+			      <div class="modal-content">
+				        <div class="modal-header">
+				          <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="clearModalErrors()">&times;</button>
+				          <h4 class="modal-title">Enter you email address</h4>
+				        </div>
+				        <div class="modal-body" style="background-color: ghostwhite;">
+				        	<div data-ng-show="loginerrors.length > 0">
+							    <div  role="alert" ng-repeat="error in loginerrors" ng-class="error.code =='VERIFICATION_FAILED'? 'alert alert-danger' : 'alert alert-info'">
+							         {{error.message}}
+							    </div>
+							</div>
+				        	<div class="clearfix"></div>
+				        	<p>Please enter you email address. An email will be sent with reset password link.</p>
+				        	<input type="text" class="form-control typeahead-search-box" placeholder="Enter your email address" ng-model="email">			        	
+				        </div>
+				        <div class="clearfix"></div>
+				        <div class="modal-footer" style="margin-top:0">
+				            <button type="submit" class="btn btn-success" data-toggle="modal"  data-ng-click="forgetPassword(email)"><i ng-if="sending_password_reset_email" class="fa fa-circle-o-notch fa-spin"></i>&nbsp;Send</button>
+				        </div>
+			      </div>
+		    </div>
+		</div><!-- forgot password modal : End -->
+
+<!-- Reset password modal-->
+<div class="modal" id="resetPwdModal">
+	<div class="modal-dialog">
+		 <div class="modal-content">
+			    <div class="modal-header">
+			    	<button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="clearModalErrors()">&times;</button>
+			        <h4>Reset Password <span class="extra-title muted"></span></h4>
+			    </div>
+			    <div class="modal-body">
+			    	 <form id="resetPwdForm" name="resetPwdForm" class="form-horizontal" novalidate data-toggle="validator">
+			    	 		<div class="form-group" field-has-error>
+                                    <label for="password" class="col-sm-3 control-label">New Password</label>
+                                    <div class="col-sm-9">
+                                        <input id="newPassword" type="password" class="form-control" name="password" placeholder="Password" data-ng-model="updatePwd.password" required>
+                                    </div>
+                            </div>
+                                    
+                            <div class="form-group" field-has-error>
+                                    <label for="confirmPassword" class="col-sm-3 control-label">Confirm Password</label>
+                                    <div class="col-sm-9">
+                                        <input type="password" class="form-control" name="confirmPassword" placeholder="Re-Password" data-ng-model="updatePwd.repassword" data-match="#newPassword" data-match-error="Passwords do not match">
+                                    	<div class="help-block with-errors"></div>
+                                	</div>
+                           </div>
+			    	 </form>
+			    </div>
+			    <div class="modal-footer">
+			        <button type="submit" class="btn btn-primary" data-toggle="modal" ng-click="updatePassword(updatePwd)">Save</button>
+			    </div>
+    	</div>
+	</div>	
+</div>	<!-- Reset password modal : ENDS-->
